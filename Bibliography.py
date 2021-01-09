@@ -300,6 +300,11 @@ def p_delete_button():
 def start_screen():
 	global root
 
+	try:
+		window.destroy()
+	except:
+		pass
+
 	root = Tk()
 	root.title('Bibliography')
 	root.configure(background='#35393f')
@@ -563,7 +568,7 @@ def get_text(widget):
 	return text
 
 def sip_display():
-	global si_txt_url, si_txt_result, window
+	global si_txt_url, si_txt_result, window, page4
 
 	translations()
 	color_theme()
@@ -578,179 +583,307 @@ def sip_display():
 	window.columnconfigure([0,1], weight=1)
 
 	big_font = Font(family = '@DengXian', size = 24)
+	bigger_than_normal_font = Font(family = '@DengXian', size = 18)
 
-	def website():
-		global si_txt_url, si_txt_result, si_txt_date, si_txt_author
+	head = Frame(master=window, bg='#35393f')
+	head.rowconfigure([0], weight=1)
+	head.columnconfigure([0], weight=1, minsize=50)
+	head.columnconfigure([1,2], weight=1,minsize=500)
 
-		big_font = Font(family = '@DengXian', size = 24)
-		bigger_than_normal_font = Font(family = '@DengXian', size = 18)
-		normal_font = Font(family = '@DengXian', size = 13)
-		txt_font = Font(family = 'Arial', size = 10)
+	page3 = Frame(master=window, bg='#35393f')
+	page3.rowconfigure([0,1], weight=1)
+	page3.columnconfigure([0,1], weight=1)
 
-		frm_si = Frame(master=window, highlightthickness=5, bg=bg_color)
-		frm_si.config(highlightbackground = btn_color, highlightcolor=btn_color)
-		frm_si.rowconfigure(0, weight=1)
-		frm_si.columnconfigure([0,1,2], weight=1)
-		frm_si.grid(row=0, padx=10, pady=10, sticky='nsew')
+	page4 = Frame(master=window, bg='#35393f')
+	page4.rowconfigure([0,1], weight=1)
+	page4.columnconfigure([0,1], weight=1)
 
-		si_frm_left = Frame(master=frm_si, bg=bg_color)
-		si_frm_left.rowconfigure([0,1,2], weight=1)
-		si_frm_left.columnconfigure([0,1], weight=1)
+	def header():
+		p3_back_btn = Button(master=head, text='<', bg='#7289da', fg='white', bd=0, activebackground='#536fae', activeforeground='white', font=bigger_than_normal_font, width=1, command=start_screen)
+		tab_sip = Button(master=head, text='Website / Online periodic', bg='#7289da', fg='white', bd=0, activebackground='#536fae', activeforeground='white', font=bigger_than_normal_font, width=5, command=page3_appear)
+		tab_vb = Button(master=head, text='Video / Online book', bg='#7289da', fg='white', bd=0, activebackground='#536fae', activeforeground='white', font=bigger_than_normal_font, width=5, command=page_vb)
 
-		si_frm_middle = Frame(master=frm_si, bg=bg_color)
-		si_frm_middle.rowconfigure([0,1,2], weight=1)
-		si_frm_middle.columnconfigure(0, weight=1)
+		p3_back_btn.grid(row=0, column=0, padx=(10,0), pady=(10,0), sticky='nsew')
+		tab_sip.grid(row=0, column=1, padx=10, pady=(10,0), sticky='nsew')
+		tab_vb.grid(row=0, column=2, padx=(0,10), pady=(10,0), sticky='nsew')
+	
+	def page3_appear():
+		try:
+			page4.grid_forget()		
+			head.grid(row=0, column=0, sticky='nsew')
+			page3.grid(row=1, column=0, sticky='nsew')
+		except:
+			pass
 
-		si_frm_right = Frame(master=frm_si, bg=bg_color)
-		si_frm_right.rowconfigure([0,1], weight=1)
-		si_frm_right.columnconfigure(0, weight=1)
+	def page_sip():
 
-		#LEFT FRAME
+		def website():
+			global si_txt_url, si_txt_result, si_txt_date, si_txt_author
 
-		si_lbl_url = Label(master=si_frm_left, text='URL', font=normal_font, bg=bg_color, fg=font_color)
-		si_lbl_author = Label(master=si_frm_left, text=transl_author, font=normal_font, bg=bg_color, fg=font_color)
-		si_lbl_date = Label(master=si_frm_left, text=transl_date, font=normal_font, bg=bg_color, fg=font_color)
+			big_font = Font(family = '@DengXian', size = 24)
+			bigger_than_normal_font = Font(family = '@DengXian', size = 18)
+			normal_font = Font(family = '@DengXian', size = 13)
+			txt_font = Font(family = 'Arial', size = 10)
 
-		si_lbl_url.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		si_lbl_author.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
-		si_lbl_date.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
+			frm_si = Frame(master=page3, highlightthickness=5, bg=bg_color)
+			frm_si.config(highlightbackground = btn_color, highlightcolor=btn_color)
+			frm_si.rowconfigure(0, weight=1)
+			frm_si.columnconfigure([0,1,2], weight=1)
+			frm_si.grid(row=0, padx=10, pady=10, sticky='nsew')
 
-		si_txt_url = Text(master=si_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-		si_txt_date = Text(master=si_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-		si_txt_author = Text(master=si_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			si_frm_left = Frame(master=frm_si, bg=bg_color)
+			si_frm_left.rowconfigure([0,1,2], weight=1)
+			si_frm_left.columnconfigure([0,1], weight=1)
 
-		si_txt_url.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
-		si_txt_author.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
-		si_txt_date.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
+			si_frm_middle = Frame(master=frm_si, bg=bg_color)
+			si_frm_middle.rowconfigure([0,1,2], weight=1)
+			si_frm_middle.columnconfigure(0, weight=1)
 
-		#MIDDLE FRAME
+			si_frm_right = Frame(master=frm_si, bg=bg_color)
+			si_frm_right.rowconfigure([0,1], weight=1)
+			si_frm_right.columnconfigure(0, weight=1)
 
-		si_lbl_title = Label(master=si_frm_middle, text=transl_si, height=1, width=10, font=big_font, bg=bg_color, fg=font_color)
-		si_btn_process = Button(master=si_frm_middle, text=transl_process, height=1, width=5, font=bigger_than_normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_process_bibliography)
-		si_lbl_blank1 = Label(master=si_frm_middle, height=4, bg=bg_color)
+			#LEFT FRAME
 
-		si_lbl_title.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		si_btn_process.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
-		si_lbl_blank1.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
+			si_lbl_url = Label(master=si_frm_left, text='URL', font=normal_font, bg=bg_color, fg=font_color)
+			si_lbl_author = Label(master=si_frm_left, text=transl_author, font=normal_font, bg=bg_color, fg=font_color)
+			si_lbl_date = Label(master=si_frm_left, text=transl_date, font=normal_font, bg=bg_color, fg=font_color)
 
-		#RIGHT FRAME
+			si_lbl_url.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			si_lbl_author.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+			si_lbl_date.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
 
-		scroll = Scrollbar(master=si_frm_right)		
-		scroll.grid(row=0, column=1, sticky='nsew')
+			si_txt_url = Text(master=si_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			si_txt_date = Text(master=si_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			si_txt_author = Text(master=si_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
 
-		si_txt_result = Text(master=si_frm_right, yscrollcommand=scroll.set, height=15, width=20, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-		scroll.config(command=si_txt_result.yview)
+			si_txt_url.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+			si_txt_author.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
+			si_txt_date.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
 
-		si_frm_right_buttons = Frame(master=si_frm_right, bg=bg_color)
-		si_frm_right_buttons.columnconfigure([0,1,2], weight=1)
-		si_frm_right_buttons.rowconfigure(0, weight=1)
+			#MIDDLE FRAME
 
-		si_txt_result.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		si_frm_right_buttons.grid(row=1, column=0, sticky='nsew')
+			si_lbl_title = Label(master=si_frm_middle, text=transl_si, height=1, width=10, font=big_font, bg=bg_color, fg=font_color)
+			si_btn_process = Button(master=si_frm_middle, text=transl_process, height=1, width=5, font=bigger_than_normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_process_bibliography)
+			si_lbl_blank1 = Label(master=si_frm_middle, height=4, bg=bg_color)
 
-		btn_sort = Button(master=si_frm_right_buttons, text=transl_sort, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_sort_button)
-		btn_copy = Button(master=si_frm_right_buttons, text=transl_copy, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_copy_button)
-		btn_delete = Button(master=si_frm_right_buttons, text=transl_delete, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_delete_button)
+			si_lbl_title.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			si_btn_process.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+			si_lbl_blank1.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
 
-		btn_sort.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		btn_copy.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
-		btn_delete.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+			#RIGHT FRAME
 
-		si_frm_left.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
-		si_frm_middle.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
-		si_frm_right.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
+			scroll = Scrollbar(master=si_frm_right)		
+			scroll.grid(row=0, column=1, sticky='nsew')
+
+			si_txt_result = Text(master=si_frm_right, yscrollcommand=scroll.set, height=15, width=20, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			scroll.config(command=si_txt_result.yview)
+
+			si_frm_right_buttons = Frame(master=si_frm_right, bg=bg_color)
+			si_frm_right_buttons.columnconfigure([0,1,2], weight=1)
+			si_frm_right_buttons.rowconfigure(0, weight=1)
+
+			si_txt_result.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			si_frm_right_buttons.grid(row=1, column=0, sticky='nsew')
+
+			btn_sort = Button(master=si_frm_right_buttons, text=transl_sort, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_sort_button)
+			btn_copy = Button(master=si_frm_right_buttons, text=transl_copy, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_copy_button)
+			btn_delete = Button(master=si_frm_right_buttons, text=transl_delete, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=si_delete_button)
+
+			btn_sort.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			btn_copy.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+			btn_delete.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+
+			si_frm_left.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
+			si_frm_middle.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+			si_frm_right.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
 
 
-	def periodic():
-		global p_txt_url, p_txt_result, p_txt_date, p_txt_author, p_txt_publication
+		def periodic():
+			global p_txt_url, p_txt_result, p_txt_date, p_txt_author, p_txt_publication
+			
+			big_font = Font(family = '@DengXian', size = 24)
+			bigger_than_normal_font = Font(family = '@DengXian', size = 18)
+			normal_font = Font(family = '@DengXian', size = 13)
+			txt_font = Font(family = 'Arial', size = 10)
+
+			frm_p = Frame(master=page3, highlightthickness=5, bg=bg_color)
+			frm_p.config(highlightbackground =btn_color, highlightcolor= btn_color)
+			frm_p.rowconfigure(0, weight=1)
+			frm_p.columnconfigure([0,1,2], weight=1)
+			frm_p.grid(row=1, padx=10, pady=10, sticky='nsew')
+
+			p_frm_left = Frame(master=frm_p, bg=bg_color)
+			p_frm_left.rowconfigure([0,1,2,3], weight=1)
+			p_frm_left.columnconfigure([0,1], weight=1)
+
+			p_frm_middle = Frame(master=frm_p, bg=bg_color)
+			p_frm_middle.rowconfigure([0,1,2], weight=1)
+			p_frm_middle.columnconfigure(0, weight=1)
+
+			p_frm_right = Frame(master=frm_p, bg=bg_color)
+			p_frm_right.rowconfigure([0,1], weight=1)
+			p_frm_right.columnconfigure(0, weight=1)
+
+			#LEFT FRAME
+
+			p_lbl_url = Label(master=p_frm_left, text='URL', font=normal_font, bg=bg_color, fg=font_color)
+			p_lbl_author = Label(master=p_frm_left, text=transl_author, font=normal_font, bg=bg_color, fg=font_color)
+			p_lbl_date = Label(master=p_frm_left, text=transl_date, font=normal_font, bg=bg_color, fg=font_color)
+			p_lbl_publication = Label(master=p_frm_left, text=transl_publication, font=normal_font, bg=bg_color, fg=font_color)
+
+			p_lbl_url.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			p_lbl_author.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+			p_lbl_date.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
+			p_lbl_publication.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
+
+			p_txt_url = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			p_txt_author = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)		
+			p_txt_date = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+
+			p_txt_publication = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+
+			p_txt_url.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+			p_txt_author.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
+			p_txt_date.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
+			p_txt_publication.grid(row=3, column=1, padx=5, pady=5, sticky='nsew')
+
+			#MIDDLE FRAME
+
+			p_lbl_title = Label(master=p_frm_middle, text=transl_p, height=1, width=10, font=big_font, bg=bg_color, fg=font_color)
+			p_btn_process = Button(master=p_frm_middle, text=transl_process, height=1, width=5, font=bigger_than_normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_process_bibliography)
+			p_lbl_blank1 = Label(master=p_frm_middle, height=6, bg=bg_color)
+
+			p_lbl_title.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			p_btn_process.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+			p_lbl_blank1.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
+
+			#RIGHT FRAME
+
+			scroll = Scrollbar(master=p_frm_right)		
+			scroll.grid(row=0, column=1, sticky='nsew')
+
+			p_txt_result = Text(master=p_frm_right, yscrollcommand=scroll.set, height=15, width=20, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			scroll.config(command=p_txt_result.yview)
+
+			p_frm_right_buttons = Frame(master=p_frm_right, bg=bg_color)
+			p_frm_right_buttons.columnconfigure([0,1,2], weight=1)
+			p_frm_right_buttons.rowconfigure(0, weight=1)
+
+			p_txt_result.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			p_frm_right_buttons.grid(row=1, column=0, sticky='nsew')
+
+			btn_sort = Button(master=p_frm_right_buttons, text=transl_sort, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_sort_button)
+			btn_copy = Button(master=p_frm_right_buttons, text=transl_copy, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_copy_button)
+			btn_delete = Button(master=p_frm_right_buttons, text=transl_delete, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_delete_button)
+
+			btn_sort.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			btn_copy.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+			btn_delete.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+
+			#FRAMES
+
+			p_frm_left.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
+			p_frm_middle.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+			p_frm_right.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
+
+		website()
+		periodic()
+	
+	def page_vb():
+		page3.grid_forget()
+
+		head.grid(row=0, column=0, sticky='nsew')
+		page4.grid(row=1, column=0, sticky='nsew')
+
+		def video():
+			big_font = Font(family = '@DengXian', size = 24)
+			bigger_than_normal_font = Font(family = '@DengXian', size = 18)
+			normal_font = Font(family = '@DengXian', size = 13)
+			txt_font = Font(family = 'Arial', size = 10)
+
+			frm_v = Frame(master=page4, highlightthickness=5, bg=bg_color)
+			frm_v.config(highlightbackground = btn_color, highlightcolor=btn_color)
+			frm_v.rowconfigure(0, weight=1)
+			frm_v.columnconfigure([0,1,2], weight=1)
+			frm_v.grid(row=0, padx=10, pady=10, sticky='nsew')
+
+			v_frm_left = Frame(master=frm_v, bg=bg_color)
+			v_frm_left.rowconfigure([0,1,2], weight=1)
+			v_frm_left.columnconfigure([0,1], weight=1)
+
+			v_frm_middle = Frame(master=frm_v, bg=bg_color)
+			v_frm_middle.rowconfigure([0,1,2], weight=1)
+			v_frm_middle.columnconfigure(0, weight=1)
+
+			v_frm_right = Frame(master=frm_v, bg=bg_color)
+			v_frm_right.rowconfigure([0,1], weight=1)
+			v_frm_right.columnconfigure(0, weight=1)
+
+			#LEFT FRAME
+
+			v_lbl_url = Label(master=v_frm_left, text='URL', font=normal_font, bg=bg_color, fg=font_color)
+			v_lbl_author = Label(master=v_frm_left, text=transl_author, font=normal_font, bg=bg_color, fg=font_color)
+			v_lbl_date = Label(master=v_frm_left, text=transl_date, font=normal_font, bg=bg_color, fg=font_color)
+
+			v_lbl_url.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			v_lbl_author.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+			v_lbl_date.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
+
+			v_txt_url = Text(master=v_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			v_txt_date = Text(master=v_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			v_txt_author = Text(master=v_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+
+			v_txt_url.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+			v_txt_author.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
+			v_txt_date.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
+
+			#MIDDLE FRAME
+
+			v_lbl_title = Label(master=v_frm_middle, text="transl_v", height=1, width=10, font=big_font, bg=bg_color, fg=font_color)
+			v_btn_process = Button(master=v_frm_middle, text=transl_process, height=1, width=5, font=bigger_than_normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color)
+			v_lbl_blank1 = Label(master=v_frm_middle, height=4, bg=bg_color)
+
+			v_lbl_title.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			v_btn_process.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+			v_lbl_blank1.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
+
+			#RIGHT FRAME
+
+			scroll = Scrollbar(master=v_frm_right)		
+			scroll.grid(row=0, column=1, sticky='nsew')
+
+			v_txt_result = Text(master=v_frm_right, yscrollcommand=scroll.set, height=15, width=20, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
+			scroll.config(command=v_txt_result.yview)
+
+			v_frm_right_buttons = Frame(master=v_frm_right, bg=bg_color)
+			v_frm_right_buttons.columnconfigure([0,1,2], weight=1)
+			v_frm_right_buttons.rowconfigure(0, weight=1)
+
+			v_txt_result.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			v_frm_right_buttons.grid(row=1, column=0, sticky='nsew')
+
+			btn_sort = Button(master=v_frm_right_buttons, text=transl_sort, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color)
+			btn_copy = Button(master=v_frm_right_buttons, text=transl_copy, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color)
+			btn_delete = Button(master=v_frm_right_buttons, text=transl_delete, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color)
+
+			btn_sort.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
+			btn_copy.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
+			btn_delete.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
+
+			v_frm_left.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
+			v_frm_middle.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
+			v_frm_right.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
 		
-		big_font = Font(family = '@DengXian', size = 24)
-		bigger_than_normal_font = Font(family = '@DengXian', size = 18)
-		normal_font = Font(family = '@DengXian', size = 13)
-		txt_font = Font(family = 'Arial', size = 10)
+		def book():
+			pass
 
-		frm_p = Frame(master=window, highlightthickness=5, bg=bg_color)
-		frm_p.config(highlightbackground =btn_color, highlightcolor= btn_color)
-		frm_p.rowconfigure(0, weight=1)
-		frm_p.columnconfigure([0,1,2], weight=1)
-		frm_p.grid(row=1, padx=10, pady=10, sticky='nsew')
-
-		p_frm_left = Frame(master=frm_p, bg=bg_color)
-		p_frm_left.rowconfigure([0,1,2,3], weight=1)
-		p_frm_left.columnconfigure([0,1], weight=1)
-
-		p_frm_middle = Frame(master=frm_p, bg=bg_color)
-		p_frm_middle.rowconfigure([0,1,2], weight=1)
-		p_frm_middle.columnconfigure(0, weight=1)
-
-		p_frm_right = Frame(master=frm_p, bg=bg_color)
-		p_frm_right.rowconfigure([0,1], weight=1)
-		p_frm_right.columnconfigure(0, weight=1)
-
-		#LEFT FRAME
-
-		p_lbl_url = Label(master=p_frm_left, text='URL', font=normal_font, bg=bg_color, fg=font_color)
-		p_lbl_author = Label(master=p_frm_left, text=transl_author, font=normal_font, bg=bg_color, fg=font_color)
-		p_lbl_date = Label(master=p_frm_left, text=transl_date, font=normal_font, bg=bg_color, fg=font_color)
-		p_lbl_publication = Label(master=p_frm_left, text=transl_publication, font=normal_font, bg=bg_color, fg=font_color)
-
-		p_lbl_url.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		p_lbl_author.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
-		p_lbl_date.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
-		p_lbl_publication.grid(row=3, column=0, padx=5, pady=5, sticky='nsew')
-
-		p_txt_url = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-		p_txt_author = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)		
-		p_txt_date = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-
-		p_txt_publication = Text(master=p_frm_left, height=1, width=30, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-
-		p_txt_url.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
-		p_txt_author.grid(row=1, column=1, padx=5, pady=5, sticky='nsew')
-		p_txt_date.grid(row=2, column=1, padx=5, pady=5, sticky='nsew')
-		p_txt_publication.grid(row=3, column=1, padx=5, pady=5, sticky='nsew')
-
-		#MIDDLE FRAME
-
-		p_lbl_title = Label(master=p_frm_middle, text=transl_p, height=1, width=10, font=big_font, bg=bg_color, fg=font_color)
-		p_btn_process = Button(master=p_frm_middle, text=transl_process, height=1, width=5, font=bigger_than_normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_process_bibliography)
-		p_lbl_blank1 = Label(master=p_frm_middle, height=6, bg=bg_color)
-
-		p_lbl_title.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		p_btn_process.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
-		p_lbl_blank1.grid(row=2, column=0, padx=5, pady=5, sticky='nsew')
-
-		#RIGHT FRAME
-
-		scroll = Scrollbar(master=p_frm_right)		
-		scroll.grid(row=0, column=1, sticky='nsew')
-
-		p_txt_result = Text(master=p_frm_right, yscrollcommand=scroll.set, height=15, width=20, font=txt_font, bg=txt_box_color, bd=0, fg=font_color)
-		scroll.config(command=p_txt_result.yview)
-
-		p_frm_right_buttons = Frame(master=p_frm_right, bg=bg_color)
-		p_frm_right_buttons.columnconfigure([0,1,2], weight=1)
-		p_frm_right_buttons.rowconfigure(0, weight=1)
-
-		p_txt_result.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		p_frm_right_buttons.grid(row=1, column=0, sticky='nsew')
-
-		btn_sort = Button(master=p_frm_right_buttons, text=transl_sort, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_sort_button)
-		btn_copy = Button(master=p_frm_right_buttons, text=transl_copy, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_copy_button)
-		btn_delete = Button(master=p_frm_right_buttons, text=transl_delete, height=1, width=15, font=normal_font, bg=btn_color, fg=font_color, bd=0, activebackground=btn_color_pressed, activeforeground=font_color, command=p_delete_button)
-
-		btn_sort.grid(row=0, column=0, padx=5, pady=5, sticky='nsew')
-		btn_copy.grid(row=0, column=1, padx=5, pady=5, sticky='nsew')
-		btn_delete.grid(row=0, column=2, padx=5, pady=5, sticky='nsew')
-
-		#FRAMES
-
-		p_frm_left.grid(row=0, column=0, sticky='nsew', padx=10, pady=10)
-		p_frm_middle.grid(row=0, column=1, sticky='nsew', padx=10, pady=10)
-		p_frm_right.grid(row=0, column=2, sticky='nsew', padx=10, pady=10)
-
-	website()
-	periodic()
+		video()
+		book()
+	
+	page3_appear()
+	header()
+	page_sip()
 
 if __name__ == '__main__':
 	start_screen()
